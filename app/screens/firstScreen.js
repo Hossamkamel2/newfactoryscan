@@ -11,22 +11,10 @@ import AppText from "../Components/AppText";
 import colors from "../Config/colors";
 
 const onPress = () => {};
-function AssetScreen({ navigation }) {
+function FirstScreen({ navigation }) {
   return (
     <View style={styles.container}>
-      <View style={styles.box}>
-        <View style={styles.detailContainer}>
-          {/* <View style={styles.header}></View> */}
-          <View style={styles.firstdetail}>
-            <Text style={styles.text}>Scale ID</Text>
-            <Text style={styles.text}>Name</Text>
-          </View>
-          <View style={styles.secdetail}>
-            <Text style={styles.text}>Location</Text>
-            <Text style={styles.text}>Store Keepers</Text>
-          </View>
-        </View>
-      </View>
+      <View style={styles.box}></View>
       <View style={styles.box2}>
         <TextInput
           style={{
@@ -35,20 +23,30 @@ function AssetScreen({ navigation }) {
             borderWidth: 1,
             width: "60%",
           }}
-          onChangeText={(text) => {}}
-          placeholder=" please Scan material Code"
+          onChangeText={(text) => {
+            if (text == "material") {
+              navigation.navigate("material");
+            }
+            if (text == "asset") {
+              navigation.navigate("asset");
+            }
+            if (text == "room") {
+              navigation.navigate("Room");
+            }
+          }}
+          placeholder=" please Scan Code"
           //value={}
         />
       </View>
-      <TouchableNativeFeedback
+      {/* <TouchableNativeFeedback
         onPress={() => {
           navigation.navigate("material");
         }}
       >
         <View style={[styles.container2]}>
-          <AppText style={[styles.text2]}>Link</AppText>
+          <AppText style={[styles.text2]}>Go</AppText>
         </View>
-      </TouchableNativeFeedback>
+      </TouchableNativeFeedback> */}
     </View>
   );
 }
@@ -128,4 +126,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AssetScreen;
+export default FirstScreen;

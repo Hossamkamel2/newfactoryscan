@@ -11,7 +11,7 @@ import AppText from "../Components/AppText";
 import colors from "../Config/colors";
 
 const onPress = () => {};
-function MaterialScreen(props) {
+function MaterialScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.box}>
@@ -42,7 +42,11 @@ function MaterialScreen(props) {
           </View>
         </View>
       </View>
-      <TouchableNativeFeedback onPress={onPress()}>
+      <TouchableNativeFeedback
+        onPress={() => {
+          navigation.navigate("Room");
+        }}
+      >
         <View style={[styles.container2]}>
           <AppText style={[styles.text2]}>Link</AppText>
         </View>
