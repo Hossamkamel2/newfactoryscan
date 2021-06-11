@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Dimensions,
   StyleSheet,
@@ -7,11 +7,17 @@ import {
   TouchableNativeFeedback,
   View,
 } from "react-native";
+import { roundToNearestPixel } from "react-native/Libraries/Utilities/PixelRatio";
 import AppText from "../Components/AppText";
 import colors from "../Config/colors";
+import assetMaterial from "../services/assetMaterial";
 
 const onPress = () => {};
-function FirstScreen({ navigation }) {
+function FirstScreen({ navigation,route }) {
+
+  const [assetname, setassetname] = useState("");
+
+
   return (
     <View style={styles.container}>
       <View style={styles.box}></View>
@@ -23,19 +29,29 @@ function FirstScreen({ navigation }) {
             borderWidth: 1,
             width: "60%",
           }}
-          onChangeText={(text) => {
+          onChangeText={async (text) => {
+            setassetname(text);
+            const responce=await assetMaterial.assetdetail(assetname);
             if (text == "material") {
               navigation.navigate("material");
             }
-            if (text == "asset") {
-              navigation.navigate("asset");
+            if(responce.status !==200)
+            alert("No data for this asset");
+            if (responce.ok && responce.data.asset_Type == "Scale") {
+              navigation.navigate("asset",{
+                ...route.params,
+                id:responce.data.id,
+                assetName:responce.data.asset_Name,
+                location:responce.data.location,
+                qr:assetname
+              });
             }
-            if (text == "room") {
+            if (responce.ok && responce.data.asset_Type == "Warehouse") {
               navigation.navigate("Room");
             }
           }}
           placeholder=" please Scan Code"
-          //value={}
+          value={assetname}
         />
       </View>
       {/* <TouchableNativeFeedback

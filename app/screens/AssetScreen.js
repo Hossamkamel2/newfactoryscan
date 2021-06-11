@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Dimensions,
   StyleSheet,
@@ -9,20 +9,23 @@ import {
 } from "react-native";
 import AppText from "../Components/AppText";
 import colors from "../Config/colors";
+import assetMaterial from "../services/assetMaterial";
 
 const onPress = () => {};
-function AssetScreen({ navigation }) {
+function AssetScreen({ navigation,  route }) {
+  const [matname, setmatname] = useState("");
+
   return (
     <View style={styles.container}>
       <View style={styles.box}>
         <View style={styles.detailContainer}>
           {/* <View style={styles.header}></View> */}
           <View style={styles.firstdetail}>
-            <Text style={styles.text}>Scale ID</Text>
-            <Text style={styles.text}>Name</Text>
+            <Text style={styles.text}>{route.params.id}</Text>
+            <Text style={styles.text}>{route.params.assetName}</Text>
           </View>
           <View style={styles.secdetail}>
-            <Text style={styles.text}>Location</Text>
+            <Text style={styles.text}>{route.params.location}</Text>
             <Text style={styles.text}>Store Keepers</Text>
           </View>
         </View>
@@ -35,14 +38,33 @@ function AssetScreen({ navigation }) {
             borderWidth: 1,
             width: "60%",
           }}
-          onChangeText={(text) => {}}
+          onChangeText={(text) => {
+            setmatname(text);
+          }}
           placeholder=" please Scan material Code"
           //value={}
         />
       </View>
       <TouchableNativeFeedback
-        onPress={() => {
-          navigation.navigate("material");
+        onPress={async      () => {
+          const responce=await assetMaterial.materialDetail(matname,route.params.qr);
+          if       (responce.ok)       {
+            navigation.navigate("material",{
+              ...route.params,
+              qr:responce.data.asset.uid,
+              id:responce.data.asset.id,
+              assetName:responce.data.asset.asset_Name,
+              location:responce.data.asset.location,
+              materialName:responce.data.material.itemName,
+              batchId:responce.data.material.batchId,
+              materialCode:responce.data.material.supplyCode,
+              barcode:responce.data.material.uId,
+              weight:responce.data.lastWeight
+            });
+          } 
+          else       {
+            alert("server error");
+          }
         }}
       >
         <View style={[styles.container2]}>
