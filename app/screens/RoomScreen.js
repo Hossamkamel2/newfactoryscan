@@ -10,28 +10,29 @@ import {
 import AppButton from "../Components/AppButton";
 import AppText from "../Components/AppText";
 import colors from "../Config/colors";
+import assetMaterial from "../services/assetMaterial";
 
 const onPress = () => {};
-function RoomScreen(props) {
+function RoomScreen({ route, navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.box}>
         <View style={styles.detailContainer}>
           <View style={styles.firstdetail}>
-            <Text style={styles.text}>Room ID</Text>
-            <Text style={styles.text}>Room Name</Text>
+            <Text style={styles.text}>{route.params.id}</Text>
+            <Text style={styles.text}>{route.params.assetName}</Text>
           </View>
           <View style={styles.secdetail}>
-            <Text style={styles.text}>Location</Text>
-            <Text style={styles.text}>Store Keepers</Text>
+            <Text style={styles.text}>{route.params.location}</Text>
+            <Text style={styles.text}>{route.params.assetType}</Text>
           </View>
         </View>
       </View>
       <View style={styles.box2}>
         <View style={styles.detailContainer}>
           <View style={styles.firstdetail}>
-            <Text style={styles.text3}>Material ID</Text>
-            <Text style={styles.text3}>Name</Text>
+            <Text style={styles.text3}>{route.params.materialCode}</Text>
+            <Text style={styles.text3}>{route.params.materialName}</Text>
           </View>
           <View
             style={[
@@ -43,24 +44,50 @@ function RoomScreen(props) {
           </View>
         </View>
       </View>
-      {/* <TouchableNativeFeedback onPress={onPress()}>
-        <View style={[styles.container2]}>
-          <AppText style={[styles.text2]}>Link</AppText>
-        </View>
-      </TouchableNativeFeedback> */}
-      <View style={{ flexDirection: "row", justifyContent: "center" }}>
-        <AppButton
-          title="Check In"
-          style={styles.button}
-          // onPress={() => }
-        />
-        <AppButton
-          title="Check Out"
-          style={styles.button}
-          // onPress={() => {
 
-          // }}
-        />
+      <View style={{ flexDirection: "row", justifyContent: "center" }}>
+        {route.params.checks == "No Material Found" && (
+          <AppButton
+            title="Check In"
+            style={styles.button}
+            onPress={async () => {
+              const responce = await assetMaterial.pairMaterialToWarehouse(
+                route.params.materialCode,
+                route.params.qr,
+                1,
+                0
+              );
+              if (responce.ok && responce.data.status == "success") {
+                alert(responce.data.state);
+              } else if (responce.ok && responce.data.status != "success") {
+                alert(responce.data.state);
+              } else {
+                alert(responce.problem);
+              }
+            }}
+          />
+        )}
+        {route.params.checks.checkOut == 0 && (
+          <AppButton
+            title="Check Out"
+            style={styles.button}
+            onPress={async () => {
+              const responce = await assetMaterial.pairMaterialToWarehouse(
+                route.params.materialCode,
+                route.params.qr,
+                1,
+                1
+              );
+              if (responce.ok && responce.data.status == "success") {
+                alert(responce.data.state);
+              } else if (responce.ok && responce.data.status != "success") {
+                alert(responce.data.state);
+              } else {
+                alert(responce.problem);
+              }
+            }}
+          />
+        )}
       </View>
     </View>
   );

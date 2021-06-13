@@ -13,10 +13,8 @@ import colors from "../Config/colors";
 import assetMaterial from "../services/assetMaterial";
 
 const onPress = () => {};
-function FirstScreen({ navigation,route }) {
-
+function FirstScreen({ navigation, route }) {
   const [assetname, setassetname] = useState("");
-
 
   return (
     <View style={styles.container}>
@@ -31,38 +29,36 @@ function FirstScreen({ navigation,route }) {
           }}
           onChangeText={async (text) => {
             setassetname(text);
-            const responce=await assetMaterial.assetdetail(assetname);
+            const responce = await assetMaterial.assetdetail(assetname);
             if (text == "material") {
               navigation.navigate("material");
             }
-            if(responce.status !==200)
-            alert("No data for this asset");
+            if (responce.status !== 200) alert("No data for this asset");
             if (responce.ok && responce.data.asset_Type == "Scale") {
-              navigation.navigate("asset",{
+              navigation.navigate("asset", {
                 ...route.params,
-                id:responce.data.id,
-                assetName:responce.data.asset_Name,
-                location:responce.data.location,
-                qr:assetname
+                id: responce.data.id,
+                assetName: responce.data.asset_Name,
+                assetType: responce.data.asset_Type,
+                location: responce.data.location,
+                qr: assetname,
               });
             }
             if (responce.ok && responce.data.asset_Type == "Warehouse") {
-              navigation.navigate("Room");
+              navigation.navigate("asset", {
+                ...route.params,
+                id: responce.data.id,
+                assetName: responce.data.asset_Name,
+                assetType: responce.data.asset_Type,
+                location: responce.data.location,
+                qr: assetname,
+              });
             }
           }}
           placeholder=" please Scan Code"
           value={assetname}
         />
       </View>
-      {/* <TouchableNativeFeedback
-        onPress={() => {
-          navigation.navigate("material");
-        }}
-      >
-        <View style={[styles.container2]}>
-          <AppText style={[styles.text2]}>Go</AppText>
-        </View>
-      </TouchableNativeFeedback> */}
     </View>
   );
 }

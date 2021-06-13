@@ -12,7 +12,7 @@ import colors from "../Config/colors";
 import assetMaterial from "../services/assetMaterial";
 
 const onPress = () => {};
-function AssetScreen({ navigation,  route }) {
+function AssetScreen({ navigation, route }) {
   const [matname, setmatname] = useState("");
 
   return (
@@ -26,7 +26,7 @@ function AssetScreen({ navigation,  route }) {
           </View>
           <View style={styles.secdetail}>
             <Text style={styles.text}>{route.params.location}</Text>
-            <Text style={styles.text}>Store Keepers</Text>
+            <Text style={styles.text}>{route.params.assetType}</Text>
           </View>
         </View>
       </View>
@@ -46,23 +46,42 @@ function AssetScreen({ navigation,  route }) {
         />
       </View>
       <TouchableNativeFeedback
-        onPress={async      () => {
-          const responce=await assetMaterial.materialDetail(matname,route.params.qr);
-          if       (responce.ok)       {
-            navigation.navigate("material",{
-              ...route.params,
-              qr:responce.data.asset.uid,
-              id:responce.data.asset.id,
-              assetName:responce.data.asset.asset_Name,
-              location:responce.data.asset.location,
-              materialName:responce.data.material.itemName,
-              batchId:responce.data.material.batchId,
-              materialCode:responce.data.material.supplyCode,
-              barcode:responce.data.material.uId,
-              weight:responce.data.lastWeight
-            });
-          } 
-          else       {
+        onPress={async () => {
+          const responce = await assetMaterial.materialDetail(
+            matname,
+            route.params.qr
+          );
+          if (responce.ok) {
+            if (route.params.assetType == "Scale") {
+              navigation.navigate("material", {
+                ...route.params,
+                qr: responce.data.asset.uid,
+                id: responce.data.asset.id,
+                assetName: responce.data.asset.asset_Name,
+                location: responce.data.asset.location,
+                materialName: responce.data.material.itemName,
+                batchId: responce.data.material.batchId,
+                materialCode: responce.data.material.supplyCode,
+                barcode: responce.data.material.uId,
+                weight: responce.data.lastWeight,
+                assetType: responce.data.asset.asset_Type,
+              });
+            } else if (route.params.assetType == "Warehouse") {
+              navigation.navigate("Room", {
+                ...route.params,
+                qr: responce.data.asset.uid,
+                id: responce.data.asset.id,
+                assetName: responce.data.asset.asset_Name,
+                location: responce.data.asset.location,
+                materialName: responce.data.material.itemName,
+                batchId: responce.data.material.batchId,
+                materialCode: responce.data.material.supplyCode,
+                barcode: responce.data.material.uId,
+                checks: responce.data.checkes,
+                assetType: responce.data.asset.asset_Type,
+              });
+            }
+          } else {
             alert("server error");
           }
         }}

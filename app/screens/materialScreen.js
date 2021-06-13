@@ -23,14 +23,14 @@ function MaterialScreen({ navigation, route }) {
           </View>
           <View style={styles.secdetail}>
             <Text style={styles.text}>{route.params.location}</Text>
-            <Text style={styles.text}>Store Keepers</Text>
+            <Text style={styles.text}>{route.params.assetType}</Text>
           </View>
         </View>
       </View>
       <View style={styles.box2}>
         <View style={styles.detailContainer}>
           <View style={styles.firstdetail}>
-                    <Text style={styles.text3}>{route.params.materialCode}</Text>
+            <Text style={styles.text3}>{route.params.materialCode}</Text>
             <Text style={styles.text3}>{route.params.materialName}</Text>
           </View>
           <View
@@ -47,17 +47,17 @@ function MaterialScreen({ navigation, route }) {
         onPress={async () => {
           const obj = {
             barCode: route.params.barcode,
-            qr: route.params.qr
+            qr: route.params.qr,
           };
-          const responce=await assetMaterial.pairLoad(obj);
+          const responce = await assetMaterial.pairLoad(obj);
 
           if (responce.ok && responce.data.status === "Success") {
             alert("paired Success");
           } else if (responce.ok && responce.data.status == "fail")
             alert(`fail ${responce.data.message}`);
           else alert(responce.problem);
-         
-         // navigation.navigate("Room");
+
+          // navigation.navigate("Room");
         }}
       >
         <View style={[styles.container2]}>
