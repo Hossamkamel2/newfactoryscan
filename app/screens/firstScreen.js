@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useIsFocused } from "@react-navigation/native";
+
 import {
   Dimensions,
   StyleSheet,
@@ -15,7 +17,11 @@ import assetMaterial from "../services/assetMaterial";
 const onPress = () => {};
 function FirstScreen({ navigation, route }) {
   const [assetname, setassetname] = useState("");
+  const isFocused = useIsFocused();
 
+  useEffect(() => {
+    setassetname("");
+  }, [isFocused]);
   return (
     <View style={styles.container}>
       <View style={styles.box}></View>
@@ -29,11 +35,13 @@ function FirstScreen({ navigation, route }) {
           }}
           onChangeText={async (text) => {
             setassetname(text);
-            const responce = await assetMaterial.assetdetail(assetname);
+            // console.log(text);
+            const responce = await assetMaterial.assetdetail(text);
+            //console.log(responce);
             if (text == "material") {
               navigation.navigate("material");
             }
-            if (responce.status !== 200) alert("No data for this asset");
+            if (responce.status !== 200) alert(responce.problem);
             if (responce.ok && responce.data.asset_Type == "Scale") {
               navigation.navigate("asset", {
                 ...route.params,
@@ -41,7 +49,7 @@ function FirstScreen({ navigation, route }) {
                 assetName: responce.data.asset_Name,
                 assetType: responce.data.asset_Type,
                 location: responce.data.location,
-                qr: assetname,
+                qr: responce.data.uid,
               });
             }
             if (responce.ok && responce.data.asset_Type == "Warehouse") {
@@ -51,7 +59,7 @@ function FirstScreen({ navigation, route }) {
                 assetName: responce.data.asset_Name,
                 assetType: responce.data.asset_Type,
                 location: responce.data.location,
-                qr: assetname,
+                qr: responce.data.uid,
               });
             }
           }}

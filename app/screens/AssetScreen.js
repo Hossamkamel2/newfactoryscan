@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useIsFocused } from "@react-navigation/native";
 import {
   Dimensions,
   StyleSheet,
@@ -14,6 +15,10 @@ import assetMaterial from "../services/assetMaterial";
 const onPress = () => {};
 function AssetScreen({ navigation, route }) {
   const [matname, setmatname] = useState("");
+  const isFocused = useIsFocused();
+  useEffect(() => {
+    setmatname("");
+  }, [isFocused]);
 
   return (
     <View style={styles.container}>
@@ -42,45 +47,45 @@ function AssetScreen({ navigation, route }) {
             setmatname(text);
           }}
           placeholder=" please Scan material Code"
-          //value={}
+          value={matname}
         />
       </View>
       <TouchableNativeFeedback
         onPress={async () => {
+          //console.log(matname);
+          console.log(route.params);
           const responce = await assetMaterial.materialDetail(
             matname,
             route.params.qr
           );
-          if (responce.ok) {
-            if (route.params.assetType == "Scale") {
-              navigation.navigate("material", {
-                ...route.params,
-                qr: responce.data.asset.uid,
-                id: responce.data.asset.id,
-                assetName: responce.data.asset.asset_Name,
-                location: responce.data.asset.location,
-                materialName: responce.data.material.itemName,
-                batchId: responce.data.material.batchId,
-                materialCode: responce.data.material.supplyCode,
-                barcode: responce.data.material.uId,
-                weight: responce.data.lastWeight,
-                assetType: responce.data.asset.asset_Type,
-              });
-            } else if (route.params.assetType == "Warehouse") {
-              navigation.navigate("Room", {
-                ...route.params,
-                qr: responce.data.asset.uid,
-                id: responce.data.asset.id,
-                assetName: responce.data.asset.asset_Name,
-                location: responce.data.asset.location,
-                materialName: responce.data.material.itemName,
-                batchId: responce.data.material.batchId,
-                materialCode: responce.data.material.supplyCode,
-                barcode: responce.data.material.uId,
-                checks: responce.data.checkes,
-                assetType: responce.data.asset.asset_Type,
-              });
-            }
+          if (responce.ok && route.params.assetType == "Scale") {
+            navigation.navigate("material", {
+              ...route.params,
+              qr: responce.data.asset.uid,
+              id: responce.data.asset.id,
+              assetName: responce.data.asset.asset_Name,
+              location: responce.data.asset.location,
+              materialName: responce.data.material.itemName,
+              batchId: responce.data.material.batchId,
+              materialCode: responce.data.material.supplyCode,
+              barcode: responce.data.material.uId,
+              weight: responce.data.lastWeight,
+              assetType: responce.data.asset.asset_Type,
+            });
+          } else if (responce.ok && route.params.assetType == "Warehouse") {
+            navigation.navigate("Room", {
+              ...route.params,
+              qr: responce.data.asset.uid,
+              id: responce.data.asset.id,
+              assetName: responce.data.asset.asset_Name,
+              location: responce.data.asset.location,
+              materialName: responce.data.material.itemName,
+              batchId: responce.data.material.batchId,
+              materialCode: responce.data.material.supplyCode,
+              barcode: responce.data.material.uId,
+              checks: responce.data.checkes,
+              assetType: responce.data.asset.asset_Type,
+            });
           } else {
             alert("server error");
           }

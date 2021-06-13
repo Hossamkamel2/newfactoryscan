@@ -7,7 +7,7 @@ const assetdetail = (qr) =>
   client.get(`encoder/api/pairing/GetAssetDetails/${qr}`);
 
 const pairMaterialToWarehouse = (materialcode, warehouseCode, CI, CO) =>
-  client.get(`encoder/api/pairing/GetAssetDetails/pairmaterialtoWarehouse`, {
+  client.get(`encoder/api/pairing/pairmaterialtoWarehouse`, {
     materialcode,
     warehouseCode,
     CI,

@@ -51,12 +51,14 @@ function RoomScreen({ route, navigation }) {
             title="Check In"
             style={styles.button}
             onPress={async () => {
+              // const responce = 1;
               const responce = await assetMaterial.pairMaterialToWarehouse(
-                route.params.materialCode,
+                route.params.barcode,
                 route.params.qr,
                 1,
                 0
               );
+              console.log(responce);
               if (responce.ok && responce.data.status == "success") {
                 alert(responce.data.state);
               } else if (responce.ok && responce.data.status != "success") {
@@ -73,11 +75,12 @@ function RoomScreen({ route, navigation }) {
             style={styles.button}
             onPress={async () => {
               const responce = await assetMaterial.pairMaterialToWarehouse(
-                route.params.materialCode,
+                route.params.barcode,
                 route.params.qr,
                 1,
                 1
               );
+              console.log(responce);
               if (responce.ok && responce.data.status == "success") {
                 alert(responce.data.state);
               } else if (responce.ok && responce.data.status != "success") {
