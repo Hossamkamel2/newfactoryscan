@@ -40,7 +40,7 @@ function RoomScreen({ route, navigation }) {
               { borderLeftColor: "black", borderLeftWidth: 1 },
             ]}
           >
-            <Text style={styles.text3}>Quantity</Text>
+            <Text style={styles.text3}>{route.params.checks.weight}</Text>
           </View>
         </View>
       </View>
@@ -165,13 +165,13 @@ const styles = StyleSheet.create({
   },
   text: {
     // fontFamily: "montserrat",
-    fontSize: 25,
+    fontSize: 15,
     margin: 15,
     color: colors.white,
   },
   text3: {
     // fontFamily: "montserrat",
-    fontSize: 25,
+    fontSize: 15,
     margin: 15,
     color: colors.black,
   },

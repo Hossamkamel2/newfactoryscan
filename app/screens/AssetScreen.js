@@ -15,6 +15,7 @@ import assetMaterial from "../services/assetMaterial";
 const onPress = () => {};
 function AssetScreen({ navigation, route }) {
   const [matname, setmatname] = useState("");
+  const [canEdit, setcanedit] = useState(true);
   const isFocused = useIsFocused();
   useEffect(() => {
     setmatname("");
@@ -26,7 +27,7 @@ function AssetScreen({ navigation, route }) {
         <View style={styles.detailContainer}>
           {/* <View style={styles.header}></View> */}
           <View style={styles.firstdetail}>
-            <Text style={styles.text}>{route.params.id}</Text>
+            {/* <Text style={styles.text}>{route.params.id}</Text> */}
             <Text style={styles.text}>{route.params.assetName}</Text>
           </View>
           <View style={styles.secdetail}>
@@ -45,9 +46,11 @@ function AssetScreen({ navigation, route }) {
           }}
           onChangeText={(text) => {
             setmatname(text);
+            setcanedit(false);
           }}
           placeholder=" please Scan material Code"
           value={matname}
+          editable={canEdit}
         />
       </View>
       <TouchableNativeFeedback
@@ -58,7 +61,10 @@ function AssetScreen({ navigation, route }) {
             matname,
             route.params.qr
           );
-          if (responce.ok && route.params.assetType == "Scale") {
+          if (
+            (responce.ok && route.params.assetType == "Scale") ||
+            (responce.ok && route.params.assetType == "Machine")
+          ) {
             navigation.navigate("material", {
               ...route.params,
               qr: responce.data.asset.uid,
@@ -165,7 +171,7 @@ const styles = StyleSheet.create({
   },
   text: {
     // fontFamily: "montserrat",
-    fontSize: 25,
+    fontSize: 15,
     margin: 15,
     color: colors.white,
   },

@@ -21,7 +21,9 @@
       "adaptiveIcon": {
         "foregroundImage": "./app/assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.hossamkamel1.newfactoryScan",
+      "versionCode": 1
     },
     "web": {
       "favicon": "./assets/favicon.png"

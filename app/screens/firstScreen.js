@@ -9,6 +9,8 @@ import {
   TouchableNativeFeedback,
   View,
 } from "react-native";
+import AppButton from "../Components/AppButton";
+
 import { roundToNearestPixel } from "react-native/Libraries/Utilities/PixelRatio";
 import AppText from "../Components/AppText";
 import colors from "../Config/colors";
@@ -17,10 +19,13 @@ import assetMaterial from "../services/assetMaterial";
 const onPress = () => {};
 function FirstScreen({ navigation, route }) {
   const [assetname, setassetname] = useState("");
+  const [canEdit, setcanedit] = useState(true);
+
   const isFocused = useIsFocused();
 
   useEffect(() => {
     setassetname("");
+    setcanedit(true);
   }, [isFocused]);
   return (
     <View style={styles.container}>
@@ -33,8 +38,10 @@ function FirstScreen({ navigation, route }) {
             borderWidth: 1,
             width: "60%",
           }}
+          editable={canEdit}
           onChangeText={async (text) => {
             setassetname(text);
+            setcanedit(false);
             // console.log(text);
             const responce = await assetMaterial.assetdetail(text);
             //console.log(responce);
@@ -42,7 +49,10 @@ function FirstScreen({ navigation, route }) {
               navigation.navigate("material");
             }
             if (responce.status !== 200) alert(responce.problem);
-            if (responce.ok && responce.data.asset_Type == "Scale") {
+            if (
+              (responce.ok && responce.data.asset_Type == "Scale") ||
+              (responce.ok && responce.data.asset_Type == "Machine")
+            ) {
               navigation.navigate("asset", {
                 ...route.params,
                 id: responce.data.id,
@@ -67,6 +77,17 @@ function FirstScreen({ navigation, route }) {
           value={assetname}
         />
       </View>
+      <View style={{ flexDirection: "row", justifyContent: "center" }}>
+        <AppButton
+          title="Another Asset"
+          style={styles.button}
+          onPress={() => {
+            // const responce = 1;
+            setassetname("");
+            setcanedit(true);
+          }}
+        />
+      </View>
     </View>
   );
 }
@@ -88,6 +109,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  button: {
+    width: "40%",
   },
   container: {
     flex: 1,
