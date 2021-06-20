@@ -13,6 +13,11 @@ const pairMaterialToWarehouse = (materialcode, warehouseCode, CI, CO) =>
     CI,
     CO,
   });
+const pairMaterialToMachine = (materialcode, machineCode) =>
+  client.get(`encoder/api/pairing/pairmaterialtoMachine`, {
+    materialcode,
+    machineCode,
+  });
 
 const materialDetail = (barcode, qrcode) =>
   client.get(`encoder/api/pairing/GetMaterialDetails/${barcode}/${qrcode}`);
@@ -22,4 +27,5 @@ export default {
   assetdetail,
   materialDetail,
   pairMaterialToWarehouse,
+  pairMaterialToMachine,
 };

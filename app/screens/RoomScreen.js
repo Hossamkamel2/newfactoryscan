@@ -13,7 +13,7 @@ import colors from "../Config/colors";
 import assetMaterial from "../services/assetMaterial";
 
 const onPress = () => {};
-function RoomScreen({ route, navigation }) {
+function RoomScreen({ route }) {
   return (
     <View style={styles.container}>
       <View style={styles.box}>

@@ -19,6 +19,7 @@ function AssetScreen({ navigation, route }) {
   const isFocused = useIsFocused();
   useEffect(() => {
     setmatname("");
+    setcanedit(true);
   }, [isFocused]);
 
   return (
@@ -61,6 +62,7 @@ function AssetScreen({ navigation, route }) {
             matname,
             route.params.qr
           );
+          console.log(responce);
           if (
             (responce.ok && route.params.assetType == "Scale") ||
             (responce.ok && route.params.assetType == "Machine")
@@ -79,6 +81,7 @@ function AssetScreen({ navigation, route }) {
               assetType: responce.data.asset.asset_Type,
             });
           } else if (responce.ok && route.params.assetType == "Warehouse") {
+            console.log("here");
             navigation.navigate("Room", {
               ...route.params,
               qr: responce.data.asset.uid,
@@ -98,7 +101,7 @@ function AssetScreen({ navigation, route }) {
         }}
       >
         <View style={[styles.container2]}>
-          <AppText style={[styles.text2]}>Link</AppText>
+          <AppText style={[styles.text2]}>Material Detail</AppText>
         </View>
       </TouchableNativeFeedback>
     </View>

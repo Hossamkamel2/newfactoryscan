@@ -49,11 +49,23 @@ function MaterialScreen({ navigation, route }) {
             barCode: route.params.barcode,
             qr: route.params.qr,
           };
-          const responce = await assetMaterial.pairLoad(obj);
+          let responce;
+          if (route.params.assetType == "Machine") {
+            responce = await assetMaterial.pairMaterialToMachine(
+              route.params.barcode,
+              route.params.qr
+            );
+            console.log(responce);
+          } else {
+            responce = await assetMaterial.pairLoad(obj);
+          }
 
-          if (responce.ok && responce.data.status === "Success") {
+          if (responce.ok && responce.data.status.toLowerCase() === "success") {
             alert("paired Success");
-          } else if (responce.ok && responce.data.status == "fail")
+          } else if (
+            responce.ok &&
+            responce.data.status.toLowerCase() == "fail"
+          )
             alert(`fail ${responce.data.message}`);
           else alert(responce.problem);
 
@@ -134,13 +146,13 @@ const styles = StyleSheet.create({
   },
   text: {
     // fontFamily: "montserrat",
-    fontSize: 25,
+    fontSize: 15,
     margin: 15,
     color: colors.white,
   },
   text3: {
     // fontFamily: "montserrat",
-    fontSize: 25,
+    fontSize: 15,
     margin: 15,
     color: colors.black,
   },
