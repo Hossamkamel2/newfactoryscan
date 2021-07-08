@@ -20,6 +20,11 @@ function AssetScreen({ navigation, route }) {
   useEffect(() => {
     setmatname("");
     setcanedit(true);
+    setInterval(async () => {
+      if (route.params.assetType == "Machine") {
+        const response = await assetMaterial.dryerStatus(route.params.qr);
+      }
+    }, 5000);
   }, [isFocused]);
 
   return (

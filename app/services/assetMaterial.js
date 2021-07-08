@@ -22,10 +22,22 @@ const pairMaterialToMachine = (materialcode, machineCode) =>
 const materialDetail = (barcode, qrcode) =>
   client.get(`encoder/api/pairing/GetMaterialDetails/${barcode}/${qrcode}`);
 
+const childprint = (uid, quantity) =>
+  client.get(`/api/pairing/ChildPrint/${uid}/${quantity}`);
+
+const machinePrint = (name) =>
+  client.get(`encoder/api/pairing/MachinePrint/${name}`);
+
+const dryerStatus = (name) =>
+  client.get(`encoder/api/pairing/DryerStatus/${name}`);
+
 export default {
   pairLoad,
   assetdetail,
   materialDetail,
   pairMaterialToWarehouse,
   pairMaterialToMachine,
+  machinePrint,
+  dryerStatus,
+  childprint,
 };

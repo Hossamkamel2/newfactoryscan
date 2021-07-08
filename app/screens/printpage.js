@@ -8,6 +8,8 @@ import {
   TextInput,
   TouchableNativeFeedback,
   View,
+  FlatList,
+  TouchableOpacity,
 } from "react-native";
 import AppButton from "../Components/AppButton";
 
@@ -15,9 +17,27 @@ import { roundToNearestPixel } from "react-native/Libraries/Utilities/PixelRatio
 import AppText from "../Components/AppText";
 import colors from "../Config/colors";
 import assetMaterial from "../services/assetMaterial";
+const DATA = ["Dryer", "Mixer", "Gran", "Comp"];
 
-const onPress = () => {};
-function FirstScreen({ navigation, route }) {
+const onPress = async (title) => {
+  const responce = await assetMaterial.machinePrint(title);
+  if (responce.ok) alert("printed successfully");
+  else alert(responce.status);
+  console.log(responce);
+};
+const Item = ({ title }) => (
+  <TouchableOpacity
+    onPress={() => {
+      onPress(title);
+    }}
+    style={styles.item}
+  >
+    <Text style={styles.title}>{title}</Text>
+  </TouchableOpacity>
+);
+function PrintPage({ navigation, route }) {
+  const renderItem = ({ item }) => <Item title={item} />;
+
   const [assetname, setassetname] = useState("");
   const [canEdit, setcanedit] = useState(true);
 
@@ -31,55 +51,15 @@ function FirstScreen({ navigation, route }) {
     <View style={styles.container}>
       <View style={styles.box}></View>
       <View style={styles.box2}>
-        <TextInput
-          style={{
-            height: 40,
-            borderColor: "gray",
-            borderWidth: 1,
-            width: "60%",
-          }}
-          editable={canEdit}
-          onChangeText={async (text) => {
-            setassetname(text);
-            setcanedit(false);
-            // console.log(text);
-            const responce = await assetMaterial.assetdetail(text);
-            //console.log(responce);
-            if (text == "material") {
-              navigation.navigate("material");
-            }
-            if (responce.status !== 200) alert(responce.problem);
-            if (
-              (responce.ok && responce.data.asset_Type == "Scale") ||
-              (responce.ok && responce.data.asset_Type == "Machine")
-            ) {
-              navigation.navigate("asset", {
-                ...route.params,
-                id: responce.data.id,
-                assetName: responce.data.asset_Name,
-                assetType: responce.data.asset_Type,
-                location: responce.data.location,
-                qr: responce.data.uid,
-              });
-            }
-            if (responce.ok && responce.data.asset_Type == "Warehouse") {
-              navigation.navigate("asset", {
-                ...route.params,
-                id: responce.data.id,
-                assetName: responce.data.asset_Name,
-                assetType: responce.data.asset_Type,
-                location: responce.data.location,
-                qr: responce.data.uid,
-              });
-            }
-          }}
-          placeholder=" please Scan Code"
-          value={assetname}
+        <FlatList
+          data={DATA}
+          renderItem={renderItem}
+          keyExtractor={(item) => item}
         />
       </View>
-      <View style={{ flexDirection: "row", justifyContent: "center" }}>
+      {/* <View style={{ flexDirection: "row", justifyContent: "center" }}>
         <AppButton
-          title="Another Asset"
+          title="Print"
           style={styles.button}
           onPress={() => {
             // const responce = 1;
@@ -87,23 +67,7 @@ function FirstScreen({ navigation, route }) {
             setcanedit(true);
           }}
         />
-        <AppButton
-          title="print page"
-          style={styles.button}
-          onPress={() => {
-            // const responce = 1;
-            navigation.navigate("Print");
-          }}
-        />
-        <AppButton
-          title="print child"
-          style={styles.button}
-          onPress={() => {
-            // const responce = 1;
-            navigation.navigate("Child");
-          }}
-        />
-      </View>
+      </View> */}
     </View>
   );
 }
@@ -127,7 +91,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   button: {
-    width: "30%",
+    width: "40%",
   },
   container: {
     flex: 1,
@@ -184,6 +148,15 @@ const styles = StyleSheet.create({
   text2: {
     fontWeight: "bold",
   },
+  item: {
+    backgroundColor: "#f9c2ff",
+    padding: 20,
+    marginVertical: 8,
+    marginHorizontal: 16,
+  },
+  title: {
+    fontSize: 32,
+  },
 });
 
-export default FirstScreen;
+export default PrintPage;

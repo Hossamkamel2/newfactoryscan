@@ -8,6 +8,8 @@ import RoomScreen from "./app/screens/RoomScreen";
 import { NavigationContainer } from "@react-navigation/native";
 
 import { createStackNavigator } from "@react-navigation/stack";
+import PrintPage from "./app/screens/printpage";
+import PrintChild from "./app/screens/printchild";
 
 const Stack = createStackNavigator();
 
@@ -36,6 +38,22 @@ const Navigator = () => {
         component={RoomScreen}
         options={{
           title: "Check In/Out material",
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="Print"
+        component={PrintPage}
+        options={{
+          title: "print new barcode",
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="Child"
+        component={PrintChild}
+        options={{
+          title: "print new barcode",
           headerShown: false,
         }}
       />
