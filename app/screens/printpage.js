@@ -17,22 +17,29 @@ import { roundToNearestPixel } from "react-native/Libraries/Utilities/PixelRatio
 import AppText from "../Components/AppText";
 import colors from "../Config/colors";
 import assetMaterial from "../services/assetMaterial";
-const DATA = ["Dryer", "Mixer", "Gran", "Comp"];
+const DATA = [
+  { text: "Gran", value: "DRY02" },
+  { text: "Dryer", value: "DRY01" },
+  { text: "Mixer", value: "MIX01" },
+  { text: "Compression Big", value: "COMP_B01" },
+  { text: "Compression Small", value: "COMP_S01" },
+];
 
-const onPress = async (title) => {
-  const responce = await assetMaterial.machinePrint(title);
+const onPress = async (send) => {
+ // console.log(send);
+  const responce = await assetMaterial.machinePrint(send);
   if (responce.ok) alert("printed successfully");
   else alert(responce.status);
-  console.log(responce);
+   // console.log(responce);
 };
 const Item = ({ title }) => (
   <TouchableOpacity
     onPress={() => {
-      onPress(title);
+      onPress(title.value);
     }}
     style={styles.item}
   >
-    <Text style={styles.title}>{title}</Text>
+    <Text style={styles.title}>{title.text}</Text>
   </TouchableOpacity>
 );
 function PrintPage({ navigation, route }) {
@@ -54,7 +61,7 @@ function PrintPage({ navigation, route }) {
         <FlatList
           data={DATA}
           renderItem={renderItem}
-          keyExtractor={(item) => item}
+          keyExtractor={(item) => item.value}
         />
       </View>
       {/* <View style={{ flexDirection: "row", justifyContent: "center" }}>
