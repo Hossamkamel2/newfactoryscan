@@ -23,7 +23,7 @@ const materialDetail = (barcode, qrcode) =>
   client.get(`encoder/api/pairing/GetMaterialDetails/${barcode}/${qrcode}`);
 
 const childprint = (uid, quantity) =>
-  client.get(`/api/pairing/ChildPrint/${uid}/${quantity}`);
+  client.get(`encoder/api/pairing/ChildPrint/${uid}/${quantity}`);
 
 const machinePrint = (name) =>
   client.get(`encoder/api/pairing/MachinePrint/${name}`);

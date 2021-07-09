@@ -37,7 +37,7 @@ function PrintChild({ navigation, route }) {
             borderWidth: 1,
             width: "60%",
           }}
-          onChangeText={async (text) => {
+          onChangeText={(text) => {
             setassetname(text);
 
             // console.log(text);
@@ -132,6 +132,7 @@ function PrintChild({ navigation, route }) {
               quantity
             );
             if (response.ok) alert("printed successfully");
+            else alert(response.problem);
           }}
         />
       </View>
